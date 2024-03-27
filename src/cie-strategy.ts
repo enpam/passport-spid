@@ -17,7 +17,7 @@ import {
   AuthenticateOptions,
   RequestWithUser,
 } from '@node-saml/passport-saml/lib/types';
-import { SpidSAML } from './spid-saml';
+import { CieSAML } from './cie-saml';
 
 export type VerifiedCallback = (
   err: Error | null,
@@ -42,7 +42,7 @@ const cleanPem = (cert: string) =>
     .replace(/.*END.*\r?\n?/, '')
     .replace(/\r?\n/g, '');
 
-export class SpidStrategy extends MultiSamlStrategy {
+export class CieStrategy extends MultiSamlStrategy {
   private idps: IDPConfig[];
   private _spidConfig: SpidConfig;
 
@@ -78,11 +78,21 @@ export class SpidStrategy extends MultiSamlStrategy {
   }
 
   authenticate(req: RequestWithUser, options: AuthenticateOptions): void {
+
+    console.log('SpidStrategy.authenticate')
+    // req.user = req.user || {username: 'finto'};
+
     this._getSpidSamlOptions(req)
       .then((config) => {
-        const saml = new SpidSAML(config, this.getSpidConfig());
+        const saml = new CieSAML(config, this.getSpidConfig());
         const strategy = Object.assign({}, this, { _saml: saml });
         Object.setPrototypeOf(strategy, this);
+
+
+
+        console.log('SpidStrategy.authenticate.call')
+        console.log('req.user', req.user)
+
         return AbstractStrategy.prototype.authenticate.call(
           strategy,
           req,
@@ -90,6 +100,7 @@ export class SpidStrategy extends MultiSamlStrategy {
         );
       })
       .catch((err) => {
+        console.log('SpidStrategy.authenticate.catch')
         return this.error(err)
       });
   }
