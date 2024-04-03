@@ -9,10 +9,11 @@ import { SpidResponse } from './response';
 type CacheData = {
   reqXml: string;
   idpIssuer: string;
+  redirectUrl?: string;
 };
 
 export class SpidSAML extends SAML {
-  constructor(samlConfig: SamlConfig, private spidConfig: SpidConfig) {
+  constructor(samlConfig: SamlConfig, private spidConfig: SpidConfig, private redirectUrl: string) {
     super(samlConfig);
   }
 
@@ -49,6 +50,7 @@ export class SpidSAML extends SAML {
     const { cache } = this.spidConfig;
     const cacheData: CacheData = {
       reqXml: xml,
+      redirectUrl: this.redirectUrl,
       idpIssuer: this.options.idpIssuer,
     };
     await cache.set(id, JSON.stringify(cacheData));

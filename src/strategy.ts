@@ -80,8 +80,14 @@ export class SpidStrategy extends MultiSamlStrategy {
   authenticate(req: RequestWithUser, options: AuthenticateOptions): void {
     this._getSpidSamlOptions(req)
       .then((config) => {
-        const saml = new SpidSAML(config, this.getSpidConfig());
+        const redirectUrl = req.query.redirectUrl as string;
+        const saml = new SpidSAML(config, this.getSpidConfig(), redirectUrl);
         const strategy = Object.assign({}, this, { _saml: saml });
+
+        if (req.user) {
+          req.user.serviceRedirectUrl = redirectUrl;
+        }
+
         Object.setPrototypeOf(strategy, this);
         return AbstractStrategy.prototype.authenticate.call(
           strategy,

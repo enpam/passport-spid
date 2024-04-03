@@ -10,11 +10,12 @@ import { CieResponse } from './cie-response';
 type CacheData = {
   reqXml: string;
   idpIssuer: string;
+  redirectUrl?: string;
 };
 
 
 export class CieSAML extends SAML {
-  constructor(samlConfig: SamlConfig, private spidConfig: SpidConfig) {
+  constructor(samlConfig: SamlConfig, private spidConfig: SpidConfig, private redirectUrl: string) {
     super(samlConfig);
   }
 
@@ -51,8 +52,10 @@ export class CieSAML extends SAML {
     const { cache } = this.spidConfig;
     const cacheData: CacheData = {
       reqXml: xml,
+      redirectUrl: this.redirectUrl,
       idpIssuer: this.options.idpIssuer,
     };
+
     await cache.set(id, JSON.stringify(cacheData));
     const timeoutMs =
       this.options.requestIdExpirationPeriodMs ?? 1000 * 60 * 60 * 15;

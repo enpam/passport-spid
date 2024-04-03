@@ -84,11 +84,16 @@ export class CieStrategy extends MultiSamlStrategy {
 
     this._getSpidSamlOptions(req)
       .then((config) => {
-        const saml = new CieSAML(config, this.getSpidConfig());
+
+        const redirectUrl = req.query.redirectUrl as string;
+        
+        const saml = new CieSAML(config, this.getSpidConfig(), redirectUrl);
         const strategy = Object.assign({}, this, { _saml: saml });
         Object.setPrototypeOf(strategy, this);
 
-
+        if (req.user) {
+          req.user.serviceRedirectUrl = redirectUrl;
+        }
 
         console.log('SpidStrategy.authenticate.call')
         console.log('req.user', req.user)
