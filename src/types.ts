@@ -161,6 +161,7 @@ export interface SpidConfig extends StrategyOptions {
 }
 
 export interface SamlSpidProfile extends Profile {
+  redirectUrl?: string,
   getSamlRequestXml(): string;
   attributes: Partial<SpidProfile>;
 }

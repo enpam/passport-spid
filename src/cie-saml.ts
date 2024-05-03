@@ -10,6 +10,7 @@ import { CieResponse } from './cie-response';
 type CacheData = {
   reqXml: string;
   idpIssuer: string;
+  redirectUrl?: string;
 };
 
 
@@ -52,6 +53,7 @@ export class CieSAML extends SAML {
     const cacheData: CacheData = {
       reqXml: xml,
       idpIssuer: this.options.idpIssuer,
+      redirectUrl: this.options.additionalParams.redirectUrl,
     };
     await cache.set(id, JSON.stringify(cacheData));
     const timeoutMs =
@@ -93,6 +95,7 @@ export class CieSAML extends SAML {
     res.validate(req, this.spidConfig, this.options, cacheData.idpIssuer);
     const p = profile as SamlSpidProfile;
     p.getSamlRequestXml = () => reqXml;
+    p.redirectUrl = cacheData.redirectUrl;
     return { profile: p, loggedOut };
   }
 }

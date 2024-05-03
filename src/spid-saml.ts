@@ -9,6 +9,7 @@ import { SpidResponse } from './response';
 type CacheData = {
   reqXml: string;
   idpIssuer: string;
+  redirectUrl?: string;
 };
 
 export class SpidSAML extends SAML {
@@ -50,6 +51,7 @@ export class SpidSAML extends SAML {
     const cacheData: CacheData = {
       reqXml: xml,
       idpIssuer: this.options.idpIssuer,
+      redirectUrl: this.options.additionalParams.redirectUrl,
     };
     await cache.set(id, JSON.stringify(cacheData));
     const timeoutMs =
@@ -91,6 +93,7 @@ export class SpidSAML extends SAML {
     res.validate(req, this.spidConfig, this.options, cacheData.idpIssuer);
     const p = profile as SamlSpidProfile;
     p.getSamlRequestXml = () => reqXml;
+    p.redirectUrl = cacheData.redirectUrl;
     return { profile: p, loggedOut };
   }
 }

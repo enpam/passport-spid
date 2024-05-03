@@ -139,6 +139,7 @@ export class CieStrategy extends MultiSamlStrategy {
       {
         additionalParams: {
           RelayState: 'RelayState',
+          redirectUrl: req?.query?.redirectUrl,
         },
         authnContext: [SPID_LEVELS[config.spid.authnContext]],
         forceAuthn: FORCE_AUTHN_LEVELS.includes(authnContext),
