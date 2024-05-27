@@ -6,7 +6,6 @@ import {
 import type { Request } from 'express';
 import { callbackify } from 'util';
 import { getIdentityProviders } from './idp-metadata';
-import { SPMetadata } from './sp-metadata';
 import { IDPConfig, SamlSpidProfile, SpidConfig } from './types';
 import {
   SPID_LEVELS,
@@ -18,6 +17,7 @@ import {
   RequestWithUser,
 } from '@node-saml/passport-saml/lib/types';
 import { CieSAML } from './cie-saml';
+import { CieSPMetadata } from './cie-sp-metadata';
 
 export type VerifiedCallback = (
   err: Error | null,
@@ -165,7 +165,7 @@ export class CieStrategy extends MultiSamlStrategy {
         certificate,
         (err, xml) => {
           if (err) rej(err);
-          else res(new SPMetadata(xml, config).generate());
+          else res(new CieSPMetadata(xml, config).generate());
         },
       );
     });

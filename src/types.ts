@@ -36,6 +36,11 @@ export interface ContactPerson {
   VATNumber?: string;
   fiscalCode?: string;
   IPACode?: string;
+  country?: string;
+  IPACategory?: string;
+  municipality?: string;
+  NACE2Code?: string;
+  Province?: string;
 }
 
 export interface BillingContactPerson {

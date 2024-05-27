@@ -65,4 +65,5 @@ export const NS = {
   SAML_ASSERTION: 'urn:oasis:names:tc:SAML:2.0:assertion',
   SIG: 'http://www.w3.org/2000/09/xmldsig#',
   SPID: 'https://spid.gov.it/saml-extensions',
+  CIE: 'https://www.cartaidentita.interno.gov.it/saml-extensions',
 };
