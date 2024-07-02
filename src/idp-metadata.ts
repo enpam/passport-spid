@@ -20,7 +20,6 @@ export const getIdentityProviders = (
         .find((x) => x.getAttribute('Binding') === binding)
         ?.getAttribute('Location');
 
-
     let whichPathXml = () => {
       if (idp.getAttribute('entityID') === 'https://idp.namirialtsp.com/idp') {
         return idp.getElementsByTagNameNS(NS.SIG, 'X509Certificate').item(1)
@@ -30,11 +29,6 @@ export const getIdentityProviders = (
           ?.textContent
       }
     }
-
-    console.log("\n\n\n\n\n\n")
-    console.log('Lavoro per: ', idp.getAttribute('entityID'))
-    console.log('Certificato: ', whichPathXml())
-    console.log("\n\n\n\n\n\n")
 
     return {
       entityId: idp.getAttribute('entityID'),
