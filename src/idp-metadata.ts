@@ -19,10 +19,20 @@ export const getIdentityProviders = (
       Array.from(idp.getElementsByTagNameNS(NS.SAML_METADATA, tag))
         .find((x) => x.getAttribute('Binding') === binding)
         ?.getAttribute('Location');
+
+    let whichPathXml = () => {
+      if (idp.getAttribute('entityID') === 'https://idp.namirialtsp.com/idp') {
+        return idp.getElementsByTagNameNS(NS.SIG, 'X509Certificate').item(1)
+          ?.textContent
+      } else {  
+        return idp.getElementsByTagNameNS(NS.SIG, 'X509Certificate').item(0)
+          ?.textContent
+      }
+    }
+
     return {
       entityId: idp.getAttribute('entityID'),
-      cert: idp.getElementsByTagNameNS(NS.SIG, 'X509Certificate').item(0)
-        ?.textContent,
+      cert: whichPathXml(),
       entryPoint: getLocation('SingleSignOnService'),
       logoutUrl: getLocation('SingleLogoutService'),
     };
