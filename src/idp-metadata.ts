@@ -31,9 +31,14 @@ export const getIdentityProviders = (
       }
     }
 
+    console.log("\n\n\n\n\n\n")
+    console.log('Lavoro per: ', idp.getAttribute('entityID'))
+    console.log('Certificato: ', whichPathXml())
+    console.log("\n\n\n\n\n\n")
+
     return {
       entityId: idp.getAttribute('entityID'),
-      cert: whichPathXml,
+      cert: whichPathXml(),
       entryPoint: getLocation('SingleSignOnService'),
       logoutUrl: getLocation('SingleLogoutService'),
     };
